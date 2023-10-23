@@ -22,6 +22,12 @@ function visualize(kro,kvad,r)
     scatter(kvad(1,:),kvad(2,:),'yellow','filled');
     izrisi_kroznico(r);
     hold off;
+
+    % Dodaj naslov, legendo in oznake osi
+    title('Prikaz točk');
+    legend('Točke znotraj kroga', 'Točke izven kroga', 'Krožnica', 'Location', 'Best');
+    xlabel('X os');
+    ylabel('Y os');
 end
 
  function izrisi_kroznico(r)
