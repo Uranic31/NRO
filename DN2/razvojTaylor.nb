@@ -1,0 +1,175 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      6328,        165]
+NotebookOptionsPosition[      5845,        148]
+NotebookOutlinePosition[      6246,        164]
+CellTagsIndexPosition[      6203,        161]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Manipulate", "[", 
+   RowBox[{
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"t", ",", "f", ",", "approximation", ",", "plot"}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{
+       "Definicija", " ", "funkcije", " ", "in", " ", "to\[CHacek]ke", " ", 
+        "razvoja"}], "*)"}], 
+      RowBox[{
+       RowBox[{
+        RowBox[{"f", "[", "t_", "]"}], ":=", 
+        RowBox[{
+         RowBox[{"Sin", "[", "t", "]"}], " ", 
+         RowBox[{"t", "^", "2"}], " ", 
+         RowBox[{"Exp", "[", 
+          RowBox[{"-", "t"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"t0", "=", "2"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Taylorjeva", " ", "vrsta", " ", "do", " ", "n"}], "-", 
+         RowBox[{"tega", " ", "\[CHacek]lena"}]}], "*)"}], 
+       RowBox[{"approximation", "=", 
+        RowBox[{"Normal", "[", 
+         RowBox[{"Series", "[", 
+          RowBox[{
+           RowBox[{"f", "[", "t", "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"t", ",", "t0", ",", "n"}], "}"}]}], "]"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+        "Graf", " ", "funkcije", " ", "in", " ", "pribli\[ZHacek]ka"}], 
+        "*)"}], 
+       RowBox[{"plot", "=", 
+        RowBox[{"Plot", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"f", "[", "t", "]"}], ",", "approximation"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"t", ",", "0", ",", "4"}], "}"}], ",", 
+          RowBox[{"PlotStyle", "->", 
+           RowBox[{"{", 
+            RowBox[{"Blue", ",", "Red"}], "}"}]}], ",", 
+          RowBox[{"PlotRange", "->", "All"}], ",", 
+          RowBox[{"PlotLegends", "->", 
+           RowBox[{"{", 
+            RowBox[{
+            "\"\<Original Function\>\"", ",", "\"\<Approximation\>\""}], 
+            "}"}]}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Prikaz", " ", "grafa"}], "*)"}], 
+       RowBox[{"Show", "[", 
+        RowBox[{"plot", ",", 
+         RowBox[{"AxesLabel", "->", 
+          RowBox[{"{", 
+           RowBox[{"\"\<t\>\"", ",", "\"\<f(t)\>\""}], "}"}]}]}], "]"}]}]}], 
+     "]"}], ",", 
+    RowBox[{"(*", 
+     RowBox[{
+     "Drsnik", " ", "za", " ", "spreminjanje", " ", "reda", " ", 
+      "pribli\[ZHacek]ka"}], "*)"}], 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"n", ",", "1", ",", "\"\<Order of Approximation\>\""}], "}"}], 
+      ",", "1", ",", "10", ",", "1", ",", 
+      RowBox[{"Appearance", "->", "\"\<Labeled\>\""}]}], "}"}]}], "]"}], 
+  "\n"}]], "Input",
+ CellChangeTimes->{{3.908708617417736*^9, 3.9087086174187355`*^9}},
+ CellLabel->"In[50]:=",ExpressionUUID->"47800fc3-81d1-48d8-acb5-72bc1db3dcc9"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`n$$ = 1, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`n$$], 1, "Order of Approximation"}, 1, 10, 1}}, 
+    Typeset`size$$ = {500.19999999999993`, {109., 115.}}, Typeset`update$$ = 
+    0, Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`n$$ = 1}, 
+      "ControllerVariables" :> {}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> 
+      Module[{$CellContext`t$, $CellContext`f$, $CellContext`approximation$, \
+$CellContext`plot$}, $CellContext`f$[
+           Pattern[$CellContext`t, 
+            Blank[]]] := 
+         Sin[$CellContext`t] $CellContext`t^2 
+          Exp[-$CellContext`t]; $CellContext`t0 = 
+         2; $CellContext`approximation$ = Normal[
+           Series[
+            $CellContext`f$[$CellContext`t$], {$CellContext`t$, \
+$CellContext`t0, $CellContext`n$$}]]; $CellContext`plot$ = Plot[{
+            $CellContext`f$[$CellContext`t$], $CellContext`approximation$}, \
+{$CellContext`t$, 0, 4}, PlotStyle -> {Blue, Red}, PlotRange -> All, 
+           PlotLegends -> {"Original Function", "Approximation"}]; 
+        Show[$CellContext`plot$, AxesLabel -> {"t", "f(t)"}]], 
+      "Specifications" :> {{{$CellContext`n$$, 1, "Order of Approximation"}, 
+         1, 10, 1, Appearance -> "Labeled"}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{549., {153.13403309800196`, 158.86596690199804`}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.9087086523790035`*^9},
+ CellLabel->"Out[50]=",ExpressionUUID->"3198861a-99f3-496c-8ce5-0f375cfc9ab6"]
+}, Open  ]]
+},
+WindowSize->{1440, 741.75},
+WindowMargins->{{-6, Automatic}, {Automatic, -6}},
+FrontEndVersion->"13.3 for Microsoft Windows (64-bit) (June 3, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"bb59866a-4947-4768-84fa-8b2799948222"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 2817, 74, 124, "Input",ExpressionUUID->"47800fc3-81d1-48d8-acb5-72bc1db3dcc9"],
+Cell[3400, 98, 2429, 47, 354, "Output",ExpressionUUID->"3198861a-99f3-496c-8ce5-0f375cfc9ab6"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
