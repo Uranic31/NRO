@@ -131,7 +131,7 @@ int main() {
                    vsota += A[i][j] * T[j];
                 }
             }
-            
+
             T[i] = vsota / A[i][i];
         }
     }
@@ -145,7 +145,7 @@ int main() {
 #pragma omp parallel for
     for (int ii = 0; ii < 2000; ii++)
     {
-#pragma omp critical
+
         for (int i = 0; i < n; i++) {
             double vsota = b[i];
 
@@ -154,6 +154,8 @@ int main() {
                     vsota -= A[i][j] * T[j];
                 }
             }
+
+#pragma omp critical
 
             T[i] = vsota / A[i][i];
         }
