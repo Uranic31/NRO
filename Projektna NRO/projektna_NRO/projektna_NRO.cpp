@@ -5,7 +5,9 @@
 #include <fstream>
 #include <sstream>
 #include <omp.h>
-#include <Eigen/Dense>
+#include <chrono>
+
+// definiramo funkcijo, ki jo bomo pozneje v izraƒçunu potrebovali
 
 double preveri(double x_trenutni, double y_trenutni, double x_sosed, double y_sosed) {
 
@@ -33,53 +35,11 @@ double preveri(double x_trenutni, double y_trenutni, double x_sosed, double y_so
 	return pozicija;
 }
 
-Eigen::MatrixXd vectorOfVectorsToEigenMatrix(const std::vector<std::vector<double>>& A) {
-
-	if (A.size() == 0 || A[0].size() == 0)
-	{
-		std::cerr << "Error: Empty input vector." << std::endl;
-		return Eigen::MatrixXd();
-	}
-
-	int vrstice = A.size();
-	int stolpci = A[0].size();
-
-	Eigen::MatrixXd eigenMatrix(vrstice, stolpci);
-
-	for (int i = 0; i < vrstice; ++i)
-	{
-		for (int j = 0; j < stolpci; ++j)
-		{
-			eigenMatrix(i, j) = A[i][j];
-		}
-	}
-
-	return eigenMatrix;
-}
-
-Eigen::VectorXd vectorToEigenVector(const std::vector<double>& b) {
-	if (b.size() == 0)
-	{
-		std::cerr << "Error: Empty input vector." << std::endl;
-		return Eigen::VectorXd();
-	}
-
-	int elementi = b.size();
-
-	Eigen::VectorXd eigenVector(elementi);
-
-	for (int i = 0; i < elementi; ++i)
-	{
-		eigenVector(i) = b[i];
-	}
-
-	return eigenVector;
-}
-
+// zaƒçetek izraƒçuna
 
 int main() {
 
-	// Definiranje osnovnih veliËin
+	// Definiranje osnovnih veliƒçin
 	double deltaX = 1;
 	double deltaY = 1;
 	double k = 24;
@@ -221,8 +181,6 @@ int main() {
 		double pog1 = std::stoi(s);
 
 		pogoj1.push_back(pog1);
-
-		//std::cout << pogoj1[i] << std::endl;
 	}
 	vozlisca_robnih_pogojev.push_back(pogoj1);
 
@@ -275,8 +233,6 @@ int main() {
 		double pog2 = std::stoi(s);
 
 		pogoj2.push_back(pog2);
-
-		//std::cout << pogoj2[i] << std::endl;
 	}
 	vozlisca_robnih_pogojev.push_back(pogoj2);
 
@@ -366,7 +322,7 @@ int main() {
 	std::cout << "Datoteka uspesno prebrana!" << std::endl;
 
 
-	// ISKANJE SOSEDNJIH VOZLIä»
+	// ISKANJE SOSEDNJIH VOZLI≈†ƒå
 
 	std::vector<std::vector<double>>sosednja_vozlisca;
 
@@ -580,21 +536,19 @@ int main() {
 	}
 	std::cout << "Matrika A in vektor b sta generirana!" << std::endl;
 
-	// REäEVANJE Z GAUSS-SEIDELOVO METODO - 1000 ITERACIJ
-
+	// RE≈†EVANJE Z GAUSS-SEIDLOVO METODO - 1000 ITERACIJ
+	auto start_time_omp = std::chrono::high_resolution_clock::now();
 	std::vector<double> T_Gauss;
+#pragma omp parallel for
 	for (int T_zacetna = 0; T_zacetna < n_nodes; T_zacetna++)
 	{
 		T_Gauss.push_back(100);
 	}
-
 	int st_it = 1000;
 
-#pragma omp parallel for
+	
 	for (int ii = 0; ii < st_it; ii++)
 	{
-
-#pragma omp critical
 		for (int i = 0; i < n_nodes; i++)
 		{
 			double d = b[i];
@@ -608,9 +562,12 @@ int main() {
 			}
 
 			T_Gauss[i] = d / A[i][i];
-
+#pragma omp critical
 		}
 	}
+	auto end_time_omp = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> time_duration_omp = end_time_omp - start_time_omp;
+	std::cout << "Cas resevanja z Gauss-Seidlovo metodo: " << time_duration_omp.count() << " seconds" << std::endl;
 
 	std::cout << "Vrednosti temperature po Gauss-Seidlu: " << std::endl;
 
@@ -620,26 +577,9 @@ int main() {
 	}
 
 
-	//TOLE NWM »E NE BI KR VN DAU K POMOJM NI TREBA
-	// Reöim s knjiûnico eigen3 in uporabim funkcijo "partialPivLu" - delna LU dekompozija
-
-	Eigen::MatrixXd MatrikaA_eigen = vectorOfVectorsToEigenMatrix(A);
-	std::cout << "Matrika A prevedena v eigen!" << std::endl;
-	Eigen::VectorXd Vektorb_eigen = vectorToEigenVector(b);
-	std::cout << "Vector b preveden v eigen!" << std::endl;
-
-	Eigen::MatrixXd T_eigen;
-
-	T_eigen = MatrikaA_eigen.partialPivLu().solve(Vektorb_eigen);
-	std::cout << "PartialPivLU je zracunu!" << std::endl;
-
-	std::cout << "Resitev temperature PartialPivLU:" << std::endl;
-	std::cout << T_eigen << std::endl;
-
-
 	// VIZUALIZACIJA PODATKOV - VTK
 
-	// RoËni zapis rezultata po VTK - Gauss_Seidel metoda
+	// Roƒçni zapis rezultata po VTK - Gauss_Seidel metoda
 	std::ofstream rezultat_dat("rezultat_vtk_Gauss.vtk");
 
 	if (!rezultat_dat.is_open())
@@ -654,7 +594,7 @@ int main() {
 	rezultat_dat << "ASCII\n";
 	rezultat_dat << "DATASET UNSTRUCTURED_GRID\n";
 
-	// ToËke
+	// Toƒçke
 	rezultat_dat << "POINTS " << n_nodes << " float\n";
 	for (int koordinata_id = 0; koordinata_id < n_nodes; koordinata_id++)
 	{
@@ -685,7 +625,7 @@ int main() {
 
 	rezultat_dat << "\n";
 
-	// Info toËk
+	// Info toƒçk
 	rezultat_dat << "POINT_DATA " << n_nodes << "\n";
 	rezultat_dat << "SCALARS Temperature float 1\n";
 	rezultat_dat << "LOOKUP_TABLE default\n";
@@ -694,57 +634,4 @@ int main() {
 	{
 		rezultat_dat << T_Gauss[koordinata_id] << "\n";
 	}
-
-	// RoËni zapis rezultata po VTK - PartialPivLU (eigen3)
-	std::ofstream rezultat_dat_eigen("rezultat_vtk_eigen.vtk");
-
-	if (!rezultat_dat_eigen.is_open())
-	{
-		std::cerr << "Napaka pri ustvarjanju datoteke!" << std::endl;
-		return 1;
-	}
-
-	// Glava
-	rezultat_dat_eigen << "# vtk DataFile Version 3.0\n";
-	rezultat_dat_eigen << "Mesh_1\n";
-	rezultat_dat_eigen << "ASCII\n";
-	rezultat_dat_eigen << "DATASET UNSTRUCTURED_GRID\n";
-
-	// ToËke
-	rezultat_dat_eigen << "POINTS " << n_nodes << " float\n";
-	for (int koordinata_id = 0; koordinata_id < n_nodes; koordinata_id++)
-	{
-		rezultat_dat_eigen << X[koordinata_id] << " " << Y[koordinata_id] << " 0\n";
-	}
-
-	rezultat_dat_eigen << "\n";
-
-	// Celice
-	rezultat_dat_eigen << "CELLS " << n_celic << " " << n_celic * 5 << "\n";
-	for (int celica_id = 0; celica_id < n_celic; celica_id++)
-	{
-		int vozl_id1 = celice[celica_id][0];
-		int vozl_id2 = celice[celica_id][1];
-		int vozl_id3 = celice[celica_id][2];
-		int vozl_id4 = celice[celica_id][3];
-		rezultat_dat_eigen << "4 " << vozl_id1 << " " << vozl_id2 << " " << vozl_id3 << " " << vozl_id4 << "\n";
-	}
-
-	rezultat_dat_eigen << "\n";
-
-	// Tip celic
-	rezultat_dat_eigen << "CELL_TYPES " << n_celic << "\n";
-	for (int celica_id = 0; celica_id < n_celic; ++celica_id)
-	{
-		rezultat_dat_eigen << "9\n";
-	}
-
-	rezultat_dat_eigen << "\n";
-
-	// Info toËk
-	rezultat_dat_eigen << "POINT_DATA " << n_nodes << "\n";
-	rezultat_dat_eigen << "SCALARS Temperature float 1\n";
-	rezultat_dat_eigen << "LOOKUP_TABLE default\n";
-
-	rezultat_dat_eigen << T_eigen << "\n";
 }
