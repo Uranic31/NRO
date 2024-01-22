@@ -7,7 +7,7 @@
 #include <omp.h>
 #include <chrono>
 
-// definiramo funkcijo, ki jo bomo pozneje v izračunu potrebovali
+// Definiramo funkcijo, ki jo bomo kasneje potrebovali
 
 double preveri(double x_trenutni, double y_trenutni, double x_sosed, double y_sosed) {
 
@@ -35,7 +35,6 @@ double preveri(double x_trenutni, double y_trenutni, double x_sosed, double y_so
 	return pozicija;
 }
 
-// začetek izračuna
 
 int main() {
 
@@ -181,6 +180,8 @@ int main() {
 		double pog1 = std::stoi(s);
 
 		pogoj1.push_back(pog1);
+
+		//std::cout << pogoj1[i] << std::endl;
 	}
 	vozlisca_robnih_pogojev.push_back(pogoj1);
 
@@ -233,6 +234,8 @@ int main() {
 		double pog2 = std::stoi(s);
 
 		pogoj2.push_back(pog2);
+
+		//std::cout << pogoj2[i] << std::endl;
 	}
 	vozlisca_robnih_pogojev.push_back(pogoj2);
 
@@ -537,7 +540,7 @@ int main() {
 	std::cout << "Matrika A in vektor b sta generirana!" << std::endl;
 
 	// REŠEVANJE Z GAUSS-SEIDLOVO METODO - 1000 ITERACIJ
-	auto start_time_omp = std::chrono::high_resolution_clock::now();
+
 	std::vector<double> T_Gauss;
 #pragma omp parallel for
 	for (int T_zacetna = 0; T_zacetna < n_nodes; T_zacetna++)
@@ -560,14 +563,12 @@ int main() {
 					d = d - A[i][j] * T_Gauss[j];
 				}
 			}
+#pragma omp critical
 
 			T_Gauss[i] = d / A[i][i];
-#pragma omp critical
+
 		}
 	}
-	auto end_time_omp = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double> time_duration_omp = end_time_omp - start_time_omp;
-	std::cout << "Cas resevanja z Gauss-Seidlovo metodo: " << time_duration_omp.count() << " seconds" << std::endl;
 
 	std::cout << "Vrednosti temperature po Gauss-Seidlu: " << std::endl;
 
