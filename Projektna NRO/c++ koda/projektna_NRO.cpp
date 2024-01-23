@@ -7,7 +7,7 @@
 #include <omp.h>
 #include <chrono>
 
-// Definiramo funkcijo, ki jo bomo kasneje potrebovali
+// Definiramo funlcijo, ki jo bomo kasneje potrebovali za določitev položaja sosednjega vozlišča
 
 double preveri(double x_trenutni, double y_trenutni, double x_sosed, double y_sosed) {
 
@@ -39,9 +39,9 @@ double preveri(double x_trenutni, double y_trenutni, double x_sosed, double y_so
 int main() {
 
 	// Definiranje osnovnih veličin
-	double deltaX = 1;
-	double deltaY = 1;
-	double k = 24;
+	double deltaX = 0.0125; // m
+	double deltaY = 0.0125; // m
+	double k = 24; // W/mK
 
 	// Definiranje vektorjev in matrik
 	std::vector<double> X;
@@ -581,7 +581,7 @@ int main() {
 	// VIZUALIZACIJA PODATKOV - VTK
 
 	// Ročni zapis rezultata po VTK - Gauss_Seidel metoda
-	std::ofstream rezultat_dat("rezultat_vtk_Gauss.vtk");
+	std::ofstream rezultat_dat("rezultat_vtk_Gauss_c++.vtk");
 
 	if (!rezultat_dat.is_open())
 	{

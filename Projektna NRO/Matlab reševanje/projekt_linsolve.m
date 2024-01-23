@@ -97,8 +97,8 @@ for n = 1:n_pogoji
     line = fgetl(fid);
 end
 
-deltaX = 1;
-deltaY = 1;
+deltaX = 0.0125;
+deltaY =0.0125;
 k=24;
 
 sosednja_vozlisca = [];
@@ -284,26 +284,50 @@ for node_id = 1:n_vozlisc
     end
 end
 
-T = [];
-for T_zacetna = 1:n_vozlisc
-    T(end+1) = 100;
-end
+tic;
+T=linsolve(A,b);
 
-for iitt = 1:1000
-    for jj = 1:n_vozlisc
-        d = b(jj);
+cas_resevanja_sistema = toc;
 
-        for ii = 1:n_vozlisc
-            if(jj ~= ii)
-                d = d- A(jj, ii) * T(ii);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%T = [];
+%for T_zacetna = 1:n_vozlisc
+ %   T(end+1) = 100;
+%end
+
+%for iitt = 1:1000
+  %  for jj = 1:n_vozlisc
+       % d = b(jj);
+
+      %  for ii = 1:n_vozlisc
+           % if(jj ~= ii)
+               % d = d- A(jj, ii) * T(ii);
         
-            end
-            T(jj) = d / A(jj, jj);
-        end
-    end
-end
+           % end
+           % T(jj) = d / A(jj, jj);
+       % end
+    %end
+%end
 
-fileID = fopen('rezultat_vtk.vtk','w');
+fileID = fopen('rezultat_vtk_linsolve.vtk','w');
 fprintf(fileID,'# vtk DataFile Version 3.0\n');
 fprintf(fileID,'Mesh_1\n');
 fprintf(fileID,'ASCII\n');
